@@ -59,7 +59,7 @@ jobs:
           # git remote add origin-pages https://git@github.com/wxtim/bristolfolksoc.github.io.git > /dev/null 2>&1
           # git push --quiet -f origin-pages master
   deploy:
-    if: github.branch == 'Change-to-Github-Actions-test'
+    if: github.ref == 'refs/heads/master/Change-to-Github-Actions-test
     runs-on: ubuntu-latest
     name: Deploy the tunebook
     needs: build
