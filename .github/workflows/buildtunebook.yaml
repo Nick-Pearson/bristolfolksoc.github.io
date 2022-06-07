@@ -47,19 +47,47 @@ jobs:
           node generate.js books
           npm test;
 
-      - name: deploy tunebook
-        # This script sets up git for the deployment and commits the changes
-        # to the branch "master".
-        run: |
-          mv node_modules/ node_modules_full/
+      - name: Upload built website
+        uses: actions/upload-artifact@v3
+        with:
+          name: tune-index
+          path: tunes.json
+
+  # This script sets up git for the deployment and commits the changes
+  # to the branch "master".
+  
+          # git remote add origin-pages https://git@github.com/wxtim/bristolfolksoc.github.io.git > /dev/null 2>&1
+          # git push --quiet -f origin-pages master
+  deploy:
+    if: github.branch == 'Change-to-Github-Actions-test'
+    runs-on: ubuntu-latest
+    name: Deploy the tunebook
+    needs: build
+
+    steps:
+      - name: Check out tunebook
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install production dependencies
+        run: /
           npm install --production
+        
+      - name: Download math result for job 2
+        uses: actions/download-artifact@v3
+        with:
+          name: homework
+
+      - name: deploy tunebook
+        run: |
+          git add -f *.pdf
+          git add -f node_modules
+          git add -f tunes.json
+          git commit -m "Build"
           git config --global user.email "deploy@travis-ci.org"
           git config --global user.name "Deployment Bot"
-          rm .gitignore
-          mv .gitignore-deploy .gitignore
-          git checkout -b master
-          git add -A
-          git commit -m "Build"
-          git remote add origin-pages https://git@github.com/bristolfolksoc/bristolfolksoc.github.io.git > /dev/null 2>&1
-          git push --quiet -f origin-pages master
-          mv node_modules_full/ node_modules/
+          git remote -v
