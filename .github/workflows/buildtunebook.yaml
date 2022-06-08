@@ -25,7 +25,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: '**/node_modules'
-          key: ${{ runner.os }}-dev-modules-${{ hashFiles('package-lock.json') }}
+          key: ${{ runner.os }}-dev-modules-${{ hashFiles('**/package-lock.json') }}
 
       - name: npm install
         run: npm install
@@ -55,12 +55,8 @@ jobs:
       - name: npm Caching
         uses: actions/cache@v2
         with:
-          path: |
-            '**/node_modules'
-            '**/*.ps'
-            '**/*.eps'
-            '**/*.pdf'
-          key: ${{ runner.os }}-dev-modules-${{ hashFiles('package-lock.json') }}
+          path: '**/node_modules'
+          key: ${{ runner.os }}-dev-modules-${{ hashFiles('**/package-lock.json') }}
 
       - name: Built tunes caching
         uses: actions/cache@v2
@@ -91,7 +87,7 @@ jobs:
       - name: pdflatex main
         uses: dante-ev/latex-action@latest
         with:
-          root_file: band18.tex
+          root_file: '*.tex'
       
       - name: Upload built pdfs
         uses: actions/upload-artifact@v3
@@ -124,7 +120,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: '**/node_modules'
-          key: ${{ runner.os }}-prod-modules-${{ hashFiles('package-lock.json') }}
+          key: ${{ runner.os }}-prod-modules-${{ hashFiles('**/package-lock.json') }}
 
       - name: Install production dependencies
         run: npm install --production
