@@ -6,9 +6,9 @@ on:
       - development
 
 jobs:
-  build:
+  buildindex:
     runs-on: ubuntu-latest
-    name: Build the tunebook
+    name: Build the tune index
 
     steps:
       - name: Check out tunebook
@@ -27,6 +27,43 @@ jobs:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
 
+      - name: npm install
+        run: npm install
+
+      - name: create tunebook
+        run: node generate.js index
+
+      - name: Upload built website
+        uses: actions/upload-artifact@v3
+        with:
+          name: tune-index
+          path: tunes.json
+
+  buildpdfs:
+    runs-on: ubuntu-latest
+    name: Build the tunebook pdfs
+
+    steps:
+      - name: Check out tunebook
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: npm Caching
+        # We use node js packages stored in this repository keeping them
+        # reliable.
+        uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+
+      - name: npm install
+        run: |
+          npm install
+
       - name: install dependencies
         # Build depends on three conversion scripts provided externally.
         run: |
@@ -39,19 +76,16 @@ jobs:
           mv ./epstopdf/epstopdf.pl ./epstopdf/epstopdf
           chmod a+x ./epstopdf/epstopdf
           ./epstopdf/epstopdf -V
-          npm install
 
       - name: create tunebook
         run: |
-          node generate.js index
           node generate.js books
-          npm test;
 
-      - name: Upload built website
+      - name: Upload built pdfs
         uses: actions/upload-artifact@v3
         with:
-          name: tune-index
-          path: tunes.json
+          name: tunebook-pdfs
+          path: ./*.pdf
 
   # This script sets up git for the deployment and commits the changes
   # to the branch "master".
@@ -59,10 +93,10 @@ jobs:
           # git remote add origin-pages https://git@github.com/wxtim/bristolfolksoc.github.io.git > /dev/null 2>&1
           # git push --quiet -f origin-pages master
   deploy:
-    if: github.ref == 'refs/heads/master/Change-to-Github-Actions-test'
     runs-on: ubuntu-latest
     name: Deploy the tunebook
     needs: build
+    needs: buildpdfs
 
     steps:
       - name: Check out tunebook
@@ -77,15 +111,20 @@ jobs:
         run: /
           npm install --production
         
-      - name: Download math result for job 2
+      - name: Download tunebook index
+        uses: actions/download-artifact@v3  
+        with:
+          name: tune-index
+        
+      - name: Download tunebook pdfs
         uses: actions/download-artifact@v3
         with:
-          name: homework
+          name: tunebook-pdfs
 
       - name: deploy tunebook
         run: |
-          git add -f *.pdf
           git add -f node_modules
+          git add -f *.pdf
           git add -f tunes.json
           git commit -m "Build"
           git config --global user.email "deploy@travis-ci.org"
