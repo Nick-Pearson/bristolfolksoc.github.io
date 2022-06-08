@@ -95,7 +95,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     name: Deploy
-    needs: [build, buildpdfs]
+    needs: [buildindex, buildpdfs]
 
     steps:
       - name: Check out tunebook
