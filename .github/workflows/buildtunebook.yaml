@@ -94,9 +94,8 @@ jobs:
           # git push --quiet -f origin-pages master
   deploy:
     runs-on: ubuntu-latest
-    name: Deploy the tunebook
-    needs: build
-    needs: buildpdfs
+    name: Deploy
+    needs: [build, buildpdfs]
 
     steps:
       - name: Check out tunebook
