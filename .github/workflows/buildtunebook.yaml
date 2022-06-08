@@ -25,7 +25,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: '**/node_modules'
-          key: ${{ runner.os }}-dev-modules-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-dev-modules-${{ hashFiles('package-lock.json') }}
 
       - name: npm install
         run: npm install
@@ -60,7 +60,7 @@ jobs:
             '**/*.ps'
             '**/*.eps'
             '**/*.pdf'
-          key: ${{ runner.os }}-dev-modules-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-dev-modules-${{ hashFiles('package-lock.json') }}
 
       - name: npm Caching
         uses: actions/cache@v2
@@ -124,7 +124,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: '**/node_modules'
-          key: ${{ runner.os }}-prod-modules-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-prod-modules-${{ hashFiles('package-lock.json') }}
 
       - name: Install production dependencies
         run: npm install --production
