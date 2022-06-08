@@ -595,46 +595,6 @@ if(GenBooks)
         console.log(book.name);
         GenerateTunebook(tunes, book);
       });
-
-      if(files.length > 0)
-      {
-        const latex = exec('docker run --mount src=' + __dirname + ',target=/repo,type=bind strauman/travis-latexbuild:small');
-
-        let output = "";
-        latex.stdout.on('data', (data) => {
-          output += data.toString();
-        });
-        latex.stderr.on('data', (data) => {
-          output += data.toString();
-        });
-
-        latex.on('exit', (code) => {
-          if(code == 0)
-          {
-            // Cleanup
-            files.forEach(function(file) {
-              let book = JSON.parse(fs.readFileSync("books/" + file));
-
-              //fs.unlink(book.name + ".tex");
-              fs.unlink(book.name + ".log");
-              fs.unlink(book.name + ".ind");
-              fs.unlink(book.name + ".idx");
-              fs.unlink(book.name + ".ilg");
-              fs.unlink(book.name + ".aux");
-              fs.unlink(book.name + ".toc");
-              fs.unlink(book.name + ".fdb_latexmk");
-              fs.unlink(book.name + ".fls");
-            });
-
-            console.log(output);
-          }
-          else
-          {
-            console.log("Latex Error:");
-            console.log(output);
-          }
-        });
-      }
     });
   });
 }
