@@ -44,9 +44,6 @@ jobs:
     name: Build the tunebook pdfs
 
     steps:
-      - uses: satackey/action-docker-layer-caching@v0.0.11
-        continue-on-error: true
-
       - name: Check out tunebook
         uses: actions/checkout@v3
 
@@ -90,7 +87,7 @@ jobs:
       - name: pdflatex main
         uses: dante-ev/latex-action@latest
         with:
-          root_file: '*.tex'
+          entrypoint: ./compilepdfs.sh
       
       - name: Upload built pdfs
         uses: actions/upload-artifact@v3
