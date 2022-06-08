@@ -107,8 +107,7 @@ jobs:
           node-version: '16'
 
       - name: Install production dependencies
-        run: /
-          npm install --production
+        run: npm install --production
         
       - name: Download tunebook index
         uses: actions/download-artifact@v3  
