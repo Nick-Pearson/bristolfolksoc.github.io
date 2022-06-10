@@ -2,8 +2,8 @@ name: Build Tunebook
 
 on:
   push:
-    branches:
-      - development
+  pull_request:
+  workflow_dispatch:
 
 jobs:
   buildindex:
