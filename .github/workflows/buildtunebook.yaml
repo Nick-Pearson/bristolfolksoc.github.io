@@ -143,6 +143,4 @@ jobs:
           git add -f *.pdf
           git add -f tunes.json
           git commit -m "Build"
-          git fetch origin master
-          git show-ref
           git push --quiet -f origin HEAD:master 
