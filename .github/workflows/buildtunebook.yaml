@@ -144,4 +144,5 @@ jobs:
           git add -f tunes.json
           git commit -m "Build"
           git fetch origin master
-          git push --quiet -f origin master
+          git show-ref
+          git push --quiet -f origin HEAD:master 
