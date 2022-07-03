@@ -19,4 +19,6 @@ if [ -n "$working_directory" ]; then
   cd "$working_directory"
 fi
 
-"$compiler" $args "band18.tex"
+for file in ./*.tex; do
+  "$compiler" $args "$file"
+done

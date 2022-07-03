@@ -195,10 +195,11 @@ function RenderTunes(tunes)
         let dtime = fs.statSync(pdffile).mtime;
 
         if(dtime >= stime) return;
+        console.log("regenerating pdf data for " + tune + " as: " + stime + "/" + dtime);
       }
 
       renders++;
-      const abc_ps = exec('abcm2ps -O ' + psfile + ' -c --pagescale 0.75 --staffscale 1.5 --infoname H --infoline 1 --infospace -0.45cm --aligncomposer -1 -q ' + tune);
+      const abc_ps = exec('abcm2ps -O ' + psfile + ' -c --pagescale 0.75 --staffscale 1.5 --infoname H --infoline 1 --infospace -0.45cm --aligncomposer -1 ' + tune);
 
       let output = "";
       abc_ps.stdout.on('data', (data) => {

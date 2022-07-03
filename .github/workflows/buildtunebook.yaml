@@ -143,4 +143,4 @@ jobs:
           git add -f *.pdf
           git add -f tunes.json
           git commit -m "Build"
-          git push --quiet -f master
+          git push --quiet -f origin master
