@@ -136,7 +136,6 @@ jobs:
           name: tunebook-pdfs
 
       - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@v4
         run: |
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
