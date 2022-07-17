@@ -5,6 +5,9 @@ on:
   pull_request:
   workflow_dispatch:
 
+permissions:
+  contents: write
+  
 jobs:
   buildindex:
     runs-on: ubuntu-latest
@@ -97,9 +100,6 @@ jobs:
 
   # This script sets up git for the deployment and commits the changes
   # to the branch "master".
-  
-          # git remote add origin-pages https://git@github.com/wxtim/bristolfolksoc.github.io.git > /dev/null 2>&1
-          # git push --quiet -f origin-pages master
   deploy:
     runs-on: ubuntu-latest
     name: Deploy
@@ -135,10 +135,5 @@ jobs:
         with:
           name: tunebook-pdfs
 
-      - name: deploy tunebook
-        run: |
-          git add -f node_modules
-          git add -f *.pdf
-          git add -f tunes.json
-          git commit -m "Build"
-          git push --quiet -f origin HEAD:master 
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4
